@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Toán & Phân Tích Dữ Liệu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.1/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input, button { margin: 10px; padding: 10px; }
+        canvas { max-width: 600px; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>Giải Toán & Phân Tích Dữ Liệu</h1><h2>Máy tính toán học</h2>
+<input type="text" id="expression" placeholder="Nhập biểu thức (VD: 2+3*sqrt(4))">
+<button onclick="calculate()">Tính</button>
+<p>Kết quả: <span id="result"></span></p>
+
+<h2>Vẽ đồ thị</h2>
+<input type="text" id="function" placeholder="Nhập hàm số (VD: x^2)">
+<button onclick="drawGraph()">Vẽ</button>
+<canvas id="chart"></canvas>
+
+<script>
+    function calculate() {
+        try {
+            let expression = document.getElementById("expression").value;
+            let result = math.evaluate(expression);
+            document.getElementById("result").innerText = result;
+        } catch (e) {
+            document.getElementById("result").innerText = "Lỗi! Vui lòng nhập biểu thức hợp lệ.";
+        }
+    }
+
+    function drawGraph() {
+        try {
+            let funcInput = document.getElementById("function").value;
+            let expr = math.compile(funcInput);
+            let xValues = math.range(-10, 10, 0.5).toArray();
+            let yValues = xValues.map(x => expr.evaluate({x: x}));
+            
+            let ctx = document.getElementById("chart").getContext("2d");
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{ label: funcInput, data: yValues, borderColor: 'blue', fill: false }]
+                },
+                options: { responsive: true }
+            });
+        } catch (e) {
+            alert("Lỗi! Vui lòng nhập một hàm số hợp lệ.");
+        }
+    }
+</script>
+
+</body>
+</html>
